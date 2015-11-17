@@ -51,10 +51,11 @@ int main(int argc, char** args) {
   double scalingFactor = 1.;
   // read coarse level mesh and generate finers level meshes
   // mlMsh.ReadCoarseMesh("./input/square.neu", "seventh", scalingFactor);
-      mlMsh.GenerateCoarseBoxMesh(8,8,0,0., 1., 0., 1.,0., 0.,QUAD9,"seventh"
+      mlMsh.GenerateCoarseBoxMesh(8,8,0,-0.5, 5, -0.5,5,0., 0.,QUAD9,"seventh"
                              );
   
-  
+       // mlMsh.GenerateCoarseBoxMesh(8,8,0,-0.5, 5, -0.5,5,0., 0.,QUAD9,"seventh"
+                             //);
   
   
   
