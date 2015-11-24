@@ -50,8 +50,8 @@ int main(int argc, char** args) {
   MultiLevelMesh mlMsh;
   double scalingFactor = 1.;
   // read coarse level mesh and generate finers level meshes
-  // mlMsh.ReadCoarseMesh("./input/square.neu", "seventh", scalingFactor);
-  mlMsh.GenerateCoarseBoxMesh(2,2,0,-0.5, 5, -0.5,5,0., 0.,QUAD9,"seventh"
+  // mlMsh.ReadCoarseMesh("./input/square.neu", "seventh", scalingFactor);46ecdd8fd20747204611112c43d87c60cf60573b
+  mlMsh.GenerateCoarseBoxMesh(2,2,0,-0.5, 0.5, -0.5,0.5,0., 0.,QUAD9,"seventh"
                              );
   
        // mlMsh.GenerateCoarseBoxMesh(8,8,0,-0.5, 5, -0.5,5,0., 0.,QUAD9,"seventh"
@@ -70,7 +70,7 @@ int main(int argc, char** args) {
   MultiLevelSolution mlSol(&mlMsh);
 
   // add variables to mlSol
-  mlSol.AddSolution("U", LAGRANGE, SERENDIPITY);
+  mlSol.AddSolution("U", LAGRANGE, SECOND);
   
 
   mlSol.Initialize("All");    // initialize all varaibles to zero
@@ -201,6 +201,7 @@ void AssemblePoissonProblem(MultiLevelProblem& ml_prob) {
     l2GMap.resize(nDofu);
     solu.resize(nDofu);
 
+    
     for (int i = 0; i < dim; i++) {
       x[i].resize(nDofx);
     }
@@ -209,7 +210,7 @@ void AssemblePoissonProblem(MultiLevelProblem& ml_prob) {
     std::fill(Res.begin(), Res.end(), 0);    //set Res to zero
 
     Jac.resize(nDofu * nDofu);    //resize
-    std::fill(Jac.begin(), Jac.end(), 0);    //set Jac to zero
+    std::fill(Jac.begin(), Jac.end(),0);    //set Jac to zero
 
     // local storage of global mapping and solution
     for (unsigned i = 0; i < nDofu; i++) {
