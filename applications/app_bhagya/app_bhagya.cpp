@@ -17,6 +17,7 @@
 #include "GMVWriter.hpp"
 #include "LinearImplicitSystem.hpp"
 #include "NumericVector.hpp"
+#include "Files.hpp"
 
 using namespace femus;
 
@@ -46,12 +47,17 @@ int main(int argc, char** args) {
   // init Petsc-MPI communicator
   FemusInit mpinit(argc, args, MPI_COMM_WORLD);
 
+  // files 
+    Files files; 
+        files.CheckIODirectories();
+        files.RedirectCout();
+  
   // define multilevel mesh
   MultiLevelMesh mlMsh;
   double scalingFactor = 1.;
   // read coarse level mesh and generate finers level meshes
   // mlMsh.ReadCoarseMesh("./input/square.neu", "seventh", scalingFactor);46ecdd8fd20747204611112c43d87c60cf60573b
-  mlMsh.GenerateCoarseBoxMesh(8,8,0,-0.5, 0.5, -0.5,0.5,0., 0.,QUAD9,"seventh"
+  mlMsh.GenerateCoarseBoxMesh(2,2,0,-0.5, 0.5, -0.5,0.5,0., 0.,QUAD9,"seventh"
                              );
   
        // mlMsh.GenerateCoarseBoxMesh(8,8,0,-0.5, 5, -0.5,5,0., 0.,QUAD9,"seventh"
@@ -108,12 +114,12 @@ int main(int argc, char** args) {
   variablesToBePrinted.push_back("U");
 
   VTKWriter vtkIO(&mlSol);
-  vtkIO.write(DEFAULT_OUTPUTDIR, "biquadratic", variablesToBePrinted);
+  vtkIO.write(files.GetOutputPath(), "biquadratic", variablesToBePrinted);
 
   GMVWriter gmvIO(&mlSol);
   variablesToBePrinted.push_back("all");
-  gmvIO.SetDebugOutput(false);
-  gmvIO.write(DEFAULT_OUTPUTDIR, "biquadratic", variablesToBePrinted);
+  //gmvIO.SetDebugOutput(false);
+  //gmvIO.write(DEFAULT_OUTPUTDIR, "biquadratic", variablesToBePrinted);
 
   return 0;
 }
