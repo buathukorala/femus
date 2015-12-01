@@ -23,7 +23,7 @@ using namespace femus;
 
 bool SetBoundaryCondition(const std::vector < double >& x, const char solName[], double& value, const int faceName, const double time) {
   bool dirichlet = true; //dirichlet
-  value = 0;
+  value = 7.*x[0];
 /*
   if (faceName == 2)
     dirichlet = false;*/
@@ -31,9 +31,6 @@ bool SetBoundaryCondition(const std::vector < double >& x, const char solName[],
   return dirichlet;
 }
 
-double InitalValueU(const std::vector < double >& x) {
-  return x[0] + x[1];
-}
 
 void AssemblePoissonProblem(MultiLevelProblem& ml_prob);
 
@@ -41,6 +38,10 @@ double GetExactSolutionLaplace(const std::vector < double >& x) {
   double pi = acos(-1.);
   return -pi * pi * cos(pi * x[0]) * cos(pi * x[1]) - pi * pi * cos(pi * x[0]) * cos(pi * x[1]);
 };
+
+double InitalValueU(const std::vector < double >& x) {
+  return 7.*x[0];
+}
 
 int main(int argc, char** args) {
 
@@ -57,8 +58,7 @@ int main(int argc, char** args) {
   double scalingFactor = 1.;
   // read coarse level mesh and generate finers level meshes
   // mlMsh.ReadCoarseMesh("./input/square.neu", "seventh", scalingFactor);46ecdd8fd20747204611112c43d87c60cf60573b
-  mlMsh.GenerateCoarseBoxMesh(2,2,0,-0.5, 0.5, -0.5,0.5,0., 0.,QUAD9,"seventh"
-                             );
+  mlMsh.GenerateCoarseBoxMesh(32,32,0,-0.5, 0.5, -0.5,0.5,0., 0.,QUAD9,"seventh");
   
        // mlMsh.GenerateCoarseBoxMesh(8,8,0,-0.5, 5, -0.5,5,0., 0.,QUAD9,"seventh"
                              //);
@@ -79,7 +79,7 @@ int main(int argc, char** args) {
   mlSol.AddSolution("U", LAGRANGE, SECOND);
   
 
-  mlSol.Initialize("All");    // initialize all varaibles to zero
+  mlSol.Initialize("U",InitalValueU );    // initialize all varaibles to zero
   
  
 
